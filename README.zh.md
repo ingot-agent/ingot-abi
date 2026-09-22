@@ -47,18 +47,21 @@ import (
 	ingotabi "github.com/ingot-agent/ingot-abi"
 )
 
-type Config struct{}
 type Dependencies struct{}
 type Exports struct{}
 
 func New(
 	ctx context.Context,
-	cfg Config,
 	deps Dependencies,
 ) (Exports, ingotabi.Cleanup, error) {
 	return Exports{}, nil, nil
 }
 ```
+
+当前 Core Builder 要求上述双参数构造函数。Plugin 通过显式 `state.Scope`
+依赖自行加载配置，不再接收 `Config` 参数，也不存在统一 Runtime 配置解码。
+参见 [Core 当前文件格式](https://github.com/ingot-agent/ingot/blob/main/docs/FILE_FORMATS.md)
+和 [ADR 0003](https://github.com/ingot-agent/ingot/blob/main/docs/adr/0003-plugin-configuration.md)。
 
 Builder 还会把 `ingotabi.Optional[T]` 识别为可选依赖，把
 `ingotabi.Named[T]` 识别为稳定的 Runtime Instance Identity。这些 wrapper
@@ -129,6 +132,10 @@ Builder 会精确锁定本 module。修改导出形状，或修改已承诺的 o
 
 ## 开发
 
+参见[贡献指南](CONTRIBUTING.md)中的合同准入与评审规则、
+[发布协调说明](RELEASE.md)中的 ABI/Core 协作流程，以及
+[安全报告说明](SECURITY.md)。
+
 ```sh
 go test -race ./...
 go vet ./...
@@ -137,3 +144,8 @@ go vet ./...
 ## License
 
 [Apache License 2.0](./LICENSE)
+
+## 设计历史
+
+[v0.1 提案](docs/design-history/README.md) 已从 Core 迁入，保留原 MIT 许可，
+仅供追溯；当前构造函数和配置边界以本 README 及 Core Builder 为准。

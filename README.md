@@ -50,18 +50,22 @@ import (
 	ingotabi "github.com/ingot-agent/ingot-abi"
 )
 
-type Config struct{}
 type Dependencies struct{}
 type Exports struct{}
 
 func New(
 	ctx context.Context,
-	cfg Config,
 	deps Dependencies,
 ) (Exports, ingotabi.Cleanup, error) {
 	return Exports{}, nil, nil
 }
 ```
+
+The current Core Builder requires the two-argument constructor above. Plugins
+load their own configuration through an explicit `state.Scope` dependency;
+there is no generated global configuration decoder or `Config` argument.
+See the [Core file-format reference](https://github.com/ingot-agent/ingot/blob/main/docs/FILE_FORMATS.md)
+and [ADR 0003](https://github.com/ingot-agent/ingot/blob/main/docs/adr/0003-plugin-configuration.md).
 
 The Builder also recognizes `ingotabi.Optional[T]` as an optional dependency
 and `ingotabi.Named[T]` as a stable runtime-instance identity. These wrappers
@@ -138,6 +142,10 @@ admission rule and keep the module dependency-free.
 
 ## Development
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contract admission and review rules,
+[RELEASE.md](RELEASE.md) for ABI/Core release coordination, and
+[SECURITY.md](SECURITY.md) for reporting security concerns.
+
 ```sh
 go test -race ./...
 go vet ./...
@@ -146,3 +154,9 @@ go vet ./...
 ## License
 
 [Apache License 2.0](./LICENSE)
+
+## Design history
+
+The [v0.1 proposal](docs/design-history/README.md) was migrated from Core for
+traceability. It preserves its original MIT notice and is not the current
+constructor or configuration specification.
