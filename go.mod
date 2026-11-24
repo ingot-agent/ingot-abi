@@ -1,3 +1,3 @@
 module github.com/ingot-agent/ingot-abi
 
-go 1.24.0
+go 1.26.0

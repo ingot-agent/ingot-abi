@@ -57,7 +57,7 @@ generated calls and initialization/cleanup behavior in the consuming Builder.
 
 ## Development workflow
 
-Use Go 1.24 or newer, as declared by [go.mod](go.mod). Create a focused branch
+Use Go 1.26 or newer, as declared by [go.mod](go.mod). Create a focused branch
 from the intended base and preserve existing local work. Implement only the
 agreed contract change; format changed Go files with `gofmt`.
 
